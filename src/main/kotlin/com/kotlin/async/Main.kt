@@ -13,8 +13,10 @@ fun main() {
     //Thread.sleep(5000)
     //asyncAwait()
     //asyncAwaitDeferred()
-    println(measureTimeMillis { asyncAwait() }.toString())
-    println(measureTimeMillis { asyncAwaitDeferred() }.toString())
+    //println(measureTimeMillis { asyncAwait() }.toString())
+    //println(measureTimeMillis { asyncAwaitDeferred() }.toString())
+    //println(measureTimeMillis { withContextIO() }.toString())
+    cancelCoroutine()
 }
 
 fun longTaskWithMessage(message: String) {
@@ -43,7 +45,7 @@ fun suspendExample() {
     println("Tarea3 " + Thread.currentThread().name)
 }
 
-fun suspendExample2() = runBlocking{
+fun suspendExample2() = runBlocking {
     println("Tarea1 " + Thread.currentThread().name)
     delayCoroutine("Tarea2 ")
     println("Tarea3 " + Thread.currentThread().name)
@@ -87,7 +89,7 @@ fun launch() {
 
 //Job: elemento cancelable con un ciclo de vida que culmina a su finalización. Se puede cancelar y finalizar su ejecución. Launch nos va a devolver un job.
 fun jobExample() {
-    println("Tarea1 " +  Thread.currentThread().name)
+    println("Tarea1 " + Thread.currentThread().name)
     val job = GlobalScope.launch {
         delayCoroutine("Tarea2 ")
     }
@@ -115,4 +117,27 @@ fun asyncAwaitDeferred() = runBlocking {
     val number2: Deferred<Int> = async { calculateHard() }
     val result: Int = number1.await() + number2.await()
     println(result.toString())
+}
+
+//WithContext
+fun withContextIO() = runBlocking {
+    val number1 = withContext(Dispatchers.IO) { calculateHard() }
+    val number2 = withContext(Dispatchers.IO) { calculateHard() }
+    val result: Int = number1 + number2
+    println(result.toString())
+}
+
+//Cancel coroutine
+fun cancelCoroutine() {
+    runBlocking {
+        val job = launch {
+            repeat(1000) {
+                i -> println("job: $i")
+                delay(500)
+            }
+        }
+        delay(1400)
+        job.cancel()
+        println("main: cansado de esperar")
+    }
 }

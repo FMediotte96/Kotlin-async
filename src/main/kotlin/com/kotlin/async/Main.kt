@@ -1,6 +1,7 @@
 package com.kotlin.async
 
 import kotlinx.coroutines.*
+import kotlin.system.measureTimeMillis
 
 fun main() {
     //blockingExample()
@@ -10,7 +11,10 @@ fun main() {
     //launch()
     //jobExample()
     //Thread.sleep(5000)
-    asyncAwait()
+    //asyncAwait()
+    //asyncAwaitDeferred()
+    println(measureTimeMillis { asyncAwait() }.toString())
+    println(measureTimeMillis { asyncAwaitDeferred() }.toString())
 }
 
 fun longTaskWithMessage(message: String) {
@@ -99,11 +103,16 @@ suspend fun calculateHard(): Int {
 //Async: ejecutamos algo y esperamos su resultado. Async nos va a devolver un deferred. Nos permite escribir código asincrono
 //como si fuese sincrono.
 fun asyncAwait() = runBlocking {
-    println(System.currentTimeMillis().toString())
     val number1: Int = async { calculateHard() }.await()
-    println(System.currentTimeMillis().toString())
     val number2: Int = async { calculateHard() }.await()
-    println(System.currentTimeMillis().toString())
     val result = number1 + number2
+    println(result.toString())
+}
+
+//Deferred: async nos devuelve un futuro cancelable sin bloqueos.
+fun asyncAwaitDeferred() = runBlocking {
+    val number1: Deferred<Int> = async { calculateHard() }
+    val number2: Deferred<Int> = async { calculateHard() }
+    val result: Int = number1.await() + number2.await()
     println(result.toString())
 }

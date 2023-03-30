@@ -81,9 +81,29 @@ fun main() {
 //    }
 
     //first: devuelve el primer elemento del flow
+//    runBlocking {
+//        val number = (6..90).asFlow().first()
+//        println(number)
+//    }
+
+    //reduce:
+//    runBlocking {
+//        val result = (1..3).asFlow().reduce { acc, value -> acc + value }
+//        println(result)
+//    }
+
+    //Secuencial
     runBlocking {
-        val number = (6..90).asFlow().first()
-        println(number)
+        (1..5).asFlow()
+            .filter {
+                println("Filtrado $it")
+                it % 2 == 0
+            }
+            .map {
+                println("Map $it")
+                "String $it"
+            }
+            .collect { println("Collect $it") }
     }
 }
 

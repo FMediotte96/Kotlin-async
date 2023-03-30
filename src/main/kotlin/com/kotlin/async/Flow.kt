@@ -2,7 +2,9 @@ package com.kotlin.async
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 
@@ -29,14 +31,18 @@ fun main() {
         flow.collect { println(it) }
         println("Collect again...")
         flow.collect { println(it) }
-    }*/
-
+    }
     //Cancel flow
     runBlocking {
         withTimeoutOrNull(2500) {
             firstFlow().collect { println(it) }
         }
         println("Finalizado")
+    }
+    */
+
+    runBlocking {
+        secondFlow().collect { println(it) }
     }
 }
 
@@ -70,4 +76,8 @@ fun firstFlow(): Flow<Int> = flow {
         delay(1000)
         emit(i)
     }
+}
+
+fun secondFlow(): Flow<Int> {
+    return flowOf(1, 2, 3)
 }

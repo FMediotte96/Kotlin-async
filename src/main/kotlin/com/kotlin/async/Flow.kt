@@ -2,11 +2,10 @@ package com.kotlin.async
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeoutOrNull
 
 fun main() {
     /*//show()
@@ -42,7 +41,8 @@ fun main() {
     */
 
     runBlocking {
-        secondFlow().collect { println(it) }
+        //secondFlow().collect { println(it) }
+        thirdFlow().collect { println(it) }
     }
 }
 
@@ -80,4 +80,8 @@ fun firstFlow(): Flow<Int> = flow {
 
 fun secondFlow(): Flow<Int> {
     return flowOf(1, 2, 3)
+}
+
+fun thirdFlow(): Flow<Int> {
+    return (1..3).asFlow()
 }

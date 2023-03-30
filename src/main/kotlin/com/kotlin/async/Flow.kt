@@ -42,8 +42,17 @@ fun main() {
 //        thirdFlow().collect { println(it) }
 //    }
 
+    //map
+//    runBlocking {
+//        (1..3).asFlow()
+//            .map { performRequest(it) }
+//            .collect { println(it) }
+//    }
+
+    //filter
     runBlocking {
         (1..3).asFlow()
+            .filter { it > 1 }
             .map { performRequest(it) }
             .collect { println(it) }
     }

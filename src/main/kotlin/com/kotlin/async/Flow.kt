@@ -68,10 +68,16 @@ fun main() {
     }*/
 
     //take: cancela el flow cuando llega al límite que le indicamos
+//    runBlocking {
+//        (1..3).asFlow()
+//            .take(2)
+//            .collect { println(it) }
+//    }
+
+    //list:
     runBlocking {
-        (1..3).asFlow()
-            .take(2)
-            .collect { println(it) }
+        val list: List<Int> = (1..3).asFlow().toList()
+        println(list)
     }
 }
 

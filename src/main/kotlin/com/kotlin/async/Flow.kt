@@ -75,9 +75,15 @@ fun main() {
 //    }
 
     //list:
+//    runBlocking {
+//        val list: List<Int> = (1..3).asFlow().toList()
+//        println(list)
+//    }
+
+    //first: devuelve el primer elemento del flow
     runBlocking {
-        val list: List<Int> = (1..3).asFlow().toList()
-        println(list)
+        val number = (6..90).asFlow().first()
+        println(number)
     }
 }
 

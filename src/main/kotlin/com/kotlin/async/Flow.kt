@@ -50,10 +50,20 @@ fun main() {
 //    }
 
     //filter
+//    runBlocking {
+//        (1..3).asFlow()
+//            .filter { it > 1 }
+//            .map { performRequest(it) }
+//            .collect { println(it) }
+//    }
+
+    //transform:
     runBlocking {
         (1..3).asFlow()
-            .filter { it > 1 }
-            .map { performRequest(it) }
+            .transform {
+                emit("Making request $it")
+                emit(performRequest(it))
+            }
             .collect { println(it) }
     }
 }

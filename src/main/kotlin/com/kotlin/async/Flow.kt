@@ -1,10 +1,7 @@
 package com.kotlin.async
 
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 
 fun main() {
@@ -40,9 +37,15 @@ fun main() {
     }
     */
 
+//    runBlocking {
+//        //secondFlow().collect { println(it) }
+//        thirdFlow().collect { println(it) }
+//    }
+
     runBlocking {
-        //secondFlow().collect { println(it) }
-        thirdFlow().collect { println(it) }
+        (1..3).asFlow()
+            .map { performRequest(it) }
+            .collect { println(it) }
     }
 }
 
@@ -84,4 +87,10 @@ fun secondFlow(): Flow<Int> {
 
 fun thirdFlow(): Flow<Int> {
     return (1..3).asFlow()
+}
+
+//Los flows se pueden transformar
+suspend fun performRequest(request: Int): String {
+    delay(1000)
+    return "response $request"
 }

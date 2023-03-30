@@ -58,12 +58,19 @@ fun main() {
 //    }
 
     //transform:
-    runBlocking {
+    /*runBlocking {
         (1..3).asFlow()
             .transform {
                 emit("Making request $it")
                 emit(performRequest(it))
             }
+            .collect { println(it) }
+    }*/
+
+    //take: cancela el flow cuando llega al límite que le indicamos
+    runBlocking {
+        (1..3).asFlow()
+            .take(2)
             .collect { println(it) }
     }
 }

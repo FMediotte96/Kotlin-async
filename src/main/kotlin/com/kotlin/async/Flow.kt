@@ -1,9 +1,11 @@
 package com.kotlin.async
 
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 
+@OptIn(FlowPreview::class)
 fun main() {
     /*//show()
     runBlocking {
@@ -93,18 +95,89 @@ fun main() {
 //    }
 
     //Secuencial
+//    runBlocking {
+//        (1..5).asFlow()
+//            .filter {
+//                println("Filtrado $it")
+//                it % 2 == 0
+//            }
+//            .map {
+//                println("Map $it")
+//                "String $it"
+//            }
+//            .collect { println("Collect $it") }
+//    }
+
+    //los va guardando un buffer
+//    runBlocking {
+//        val time = measureTimeMillis {
+//            firstFlow()
+//                .buffer()
+//                .collect {
+//                delay(300)
+//                println(it)
+//            }
+//        }
+//        println("$time ms")
+//    }
+
+    //conflate:
+//    runBlocking {
+//        val time = measureTimeMillis {
+//            firstFlow()
+//                .conflate()
+//                .collect {
+//                delay(300)
+//                println(it)
+//            }
+//        }
+//        println("$time ms")
+//    }
+
+    //CollectLatest
+//    runBlocking {
+//        val time = measureTimeMillis {
+//            firstFlow()
+//                .collectLatest {
+//                    println("Collecting $it")
+//                    delay(300)
+//                    println("Finalizado $it")
+//                }
+//        }
+//        println("$time ms")
+//    }
+
+    //Zip: combina los valores correspondientes de 2 flujos
+//    val numbers = (1..3).asFlow()
+//    val strings = flowOf("Uno", "Dos", "Tres")
+//
+//    runBlocking {
+//        numbers.zip(strings) {
+//            a,b -> "Zip: $a -> $b"
+//        }.collect{ println(it) }
+//    }
+
+    //FlatMapConcat
+//    runBlocking {
+//        val startTime = System.currentTimeMillis()
+//        (1..3).asFlow().onEach { delay(100) }
+//            .flatMapConcat { requestFlow(it) }
+//            .collect { println("$it at ${System.currentTimeMillis() - startTime} ms from start") }
+//    }
+
+    //FlatMapMerge
     runBlocking {
-        (1..5).asFlow()
-            .filter {
-                println("Filtrado $it")
-                it % 2 == 0
-            }
-            .map {
-                println("Map $it")
-                "String $it"
-            }
-            .collect { println("Collect $it") }
+        val startTime = System.currentTimeMillis()
+        (1..3).asFlow().onEach { delay(100) }
+            .flatMapMerge { requestFlow(it) }
+            .collect { println("$it at ${System.currentTimeMillis() - startTime} ms from start") }
     }
+}
+
+fun requestFlow(i: Int): Flow<String> = flow {
+    emit("$i: First")
+    delay(500)
+    emit("$i: Second")
 }
 
 fun show() {
@@ -134,7 +207,7 @@ suspend fun runAsynchronous(): List<Int> {
 
 fun firstFlow(): Flow<Int> = flow {
     for (i in 1..3) {
-        delay(1000)
+        delay(100)
         emit(i)
     }
 }
